@@ -75,6 +75,35 @@ object GetUserTest: Spek({
                     body("gender", equalTo("m"))
                 }
             }
+
+            Given("Valid email, but user doesn't exist")
+            {
+                json["email"] = "$randStr@$randStr.com"
+            }
+
+            Then("Should fail - no such user with specified email")
+            {
+                post {
+                    body("type", equalTo("error"))
+                    body("message", containsString("Пользователь не найден"))
+                }
+            }
+        }
+
+        Scenario("Erroneous parameters")
+        {
+            Given("User with invalid email")
+            {
+                json["email"] = "invalid email"
+            }
+
+            Then("Should fail with saying about wrong email format")
+            {
+                post {
+                    body("type", equalTo("error"))
+                    body("message", equalTo("Вы ввели неправильный email"))
+                }
+            }
         }
     }
 })

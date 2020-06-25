@@ -142,7 +142,7 @@ object DoRegisterTest: Spek({
             Then("Should succeed - user generated successfully")
             {
                 post {
-                     body("name", anything())
+                    body("name", anything())
                 }
             }
 
