@@ -16,6 +16,7 @@ object GetUserTest: Spek({
     Feature("Getting user by email")
     {
         RestAssured.baseURI = "http://users.bugred.ru"
+        RestAssured.basePath = "tasks/rest"
         RestAssured.config = RestAssured.config().encoderConfig(EncoderConfig.encoderConfig().defaultCharsetForContentType("UTF-8", "application/json"))
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails(LogDetail.BODY)
 
@@ -23,9 +24,9 @@ object GetUserTest: Spek({
         val json by memoized { mutableMapOf<String, Any?>() }
         val randStr by memoized { Helpers.randomString() }
 
-        fun post(content: String = gson.toJson(json), block: ValidatableResponse.() -> Unit)
+        fun post(block: ValidatableResponse.() -> Unit)
         {
-            Given { body(content) } When { post("/tasks/rest/getUser") } Then { block() }
+            Given { body(gson.toJson(json)) } When { post("/getUser") } Then { block() }
         }
 
         Scenario("Valid parameters")
@@ -53,6 +54,11 @@ object GetUserTest: Spek({
                 json["birthday"] = "01.01.1900"
                 json["date_start"] = "11.11.2000"
                 Given { body(gson.toJson(json)) } When { post("http://users.bugred.ru/tasks/rest/CreateUser") }
+            }
+
+            When("Getting info of an existing user")
+            {
+                json["email"] = "$randStr@example.com"
             }
 
             Then("Should return valid user with specified fields")

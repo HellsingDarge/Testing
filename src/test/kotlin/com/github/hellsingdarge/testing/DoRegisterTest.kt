@@ -15,6 +15,7 @@ object DoRegisterTest: Spek({
     Feature("doRegister")
     {
         RestAssured.baseURI = "http://users.bugred.ru"
+        RestAssured.basePath = "tasks/rest"
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails(LogDetail.BODY)
 
         val gson by memoized { GsonBuilder().serializeNulls().create() }
@@ -23,7 +24,7 @@ object DoRegisterTest: Spek({
 
         fun post(content: String = gson.toJson(json), block: ValidatableResponse.() -> Unit)
         {
-            Given { body(content) } When { post("/tasks/rest/doregister") } Then { block() }
+            Given { body(content) } When { post("/doregister") } Then { block() }
         }
 
         Scenario("Valid parameters")
