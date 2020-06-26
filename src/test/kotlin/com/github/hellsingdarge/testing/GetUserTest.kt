@@ -15,6 +15,7 @@ import org.spekframework.spek2.style.gherkin.Feature
 object GetUserTest: Spek({
     Feature("Getting user by email")
     {
+        RestAssured.reset()
         RestAssured.baseURI = "http://users.bugred.ru"
         RestAssured.basePath = "tasks/rest"
         RestAssured.config = RestAssured.config().encoderConfig(EncoderConfig.encoderConfig().defaultCharsetForContentType("UTF-8", "application/json"))

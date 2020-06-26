@@ -2,6 +2,7 @@ package com.github.hellsingdarge.testing
 
 import com.google.gson.GsonBuilder
 import io.restassured.RestAssured
+import io.restassured.config.EncoderConfig
 import io.restassured.filter.log.LogDetail
 import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
@@ -16,10 +17,11 @@ import java.net.URL
 object UpdateAvatarTest: Spek({
     Feature("Updating avatar")
     {
+        RestAssured.reset()
         RestAssured.baseURI = "http://users.bugred.ru"
         RestAssured.basePath = "tasks/rest"
+        RestAssured.config = RestAssured.config().encoderConfig(EncoderConfig.encoderConfig().defaultCharsetForContentType("UTF-8", "application/json"))
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails(LogDetail.ALL)
-        RestAssured.proxy(8080)
 
         val gson by memoized { GsonBuilder().serializeNulls().create() }
         val json by memoized { mutableMapOf<String, Any?>() }

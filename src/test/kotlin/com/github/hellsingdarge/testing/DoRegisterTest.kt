@@ -2,6 +2,7 @@ package com.github.hellsingdarge.testing
 
 import com.google.gson.GsonBuilder
 import io.restassured.RestAssured
+import io.restassured.config.EncoderConfig
 import io.restassured.filter.log.LogDetail
 import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
@@ -14,8 +15,10 @@ import org.spekframework.spek2.style.gherkin.Feature
 object DoRegisterTest: Spek({
     Feature("doRegister")
     {
+        RestAssured.reset()
         RestAssured.baseURI = "http://users.bugred.ru"
         RestAssured.basePath = "tasks/rest"
+        RestAssured.config = RestAssured.config().encoderConfig(EncoderConfig.encoderConfig().defaultCharsetForContentType("UTF-8", "application/json"))
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails(LogDetail.BODY)
 
         val gson by memoized { GsonBuilder().serializeNulls().create() }
